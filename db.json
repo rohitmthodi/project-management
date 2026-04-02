@@ -2,7 +2,7 @@
   "roles": [
     {
       "name": "Admin",
-      "description": "",
+      "description": "admin",
       "permissions": {
         "projects": {
           "create": true,
@@ -15,11 +15,11 @@
           "delete": true
         }
       },
-      "id": "BX6jbbW1NS8"
+      "id": "2z7kS_qhHwo"
     },
     {
-      "name": "Employee",
-      "description": "",
+      "name": "s",
+      "description": "s",
       "permissions": {
         "projects": {
           "create": false,
@@ -32,41 +32,24 @@
           "delete": false
         }
       },
-      "id": "znarKfQ3y1k"
+      "id": "p2-UgqAydkw"
     },
     {
-      "name": "new",
+      "name": "q",
       "description": "",
       "permissions": {
         "projects": {
           "create": false,
           "edit": false,
-          "delete": true
+          "delete": false
         },
         "tasks": {
           "create": false,
-          "edit": true,
+          "edit": false,
           "delete": false
         }
       },
-      "id": "mIR_Uel7zX8"
-    },
-    {
-      "name": "sp",
-      "description": "",
-      "permissions": {
-        "projects": {
-          "create": true,
-          "edit": true,
-          "delete": true
-        },
-        "tasks": {
-          "create": true,
-          "edit": true,
-          "delete": true
-        }
-      },
-      "id": "2YOi48ouFkg"
+      "id": "51j6qmaKZTo"
     }
   ],
   "employees": [
@@ -75,76 +58,42 @@
       "email": "admin@gmail.com",
       "password": "123",
       "role": "Admin",
-      "id": "H0_BTjstFa4"
+      "id": "admin_001"
     },
     {
-      "name": "Employee",
-      "email": "employee@gmail.com",
-      "password": "123",
-      "role": "Employee",
-      "id": "KysiCVbYr5c"
-    },
-    {
-      "name": "rohit",
+      "name": "Frontent Developer",
       "email": "rohit@gmail.com",
       "password": "123",
-      "role": "Sub Admin",
-      "id": "yhcOSdYCugA"
+      "role": "Admin",
+      "id": "b1hbzgmcFWg"
     },
     {
-      "name": "e",
+      "name": "Data Base",
       "email": "s@gmail.com",
       "password": "123",
-      "role": "new",
-      "id": "XelelIWRaOQ"
-    },
-    {
-      "name": "sp",
-      "email": "sp@gmail.com",
-      "password": "123",
-      "role": "sp",
-      "id": "P7hF4qyX-uQ"
+      "role": "q",
+      "id": "c_IBfxBQtlU"
     }
   ],
-  "projects": [
-    {
-      "name": "KitKat",
-      "description": "qq",
-      "employee": "Admin",
-      "task": "Frontend",
-      "id": "YPOiH8r_JQ8"
-    },
-    {
-      "name": "Samsung",
-      "description": "ss",
-      "employee": "rohit",
-      "task": "Frontend",
-      "id": "_R0pq-S4ENY"
-    },
-    {
-      "name": "ed2e",
-      "description": "ede",
-      "employee": "rohit",
-      "task": "Frontend",
-      "id": "Dud6xNab5Q0"
-    },
-    {
-      "name": "sp",
-      "description": "",
-      "employee": "sp",
-      "task": "Frontend",
-      "id": "89OOERkIJyU"
-    }
-  ],
+  "projects": [],
   "tasks": [
     {
-      "name": "Frontend",
-      "id": "2DjZ8myMf3I"
+      "name": "Backend Developer",
+      "id": "--wSIN3d8rY"
     },
     {
-      "name": "Backend",
-      "id": "JXdSiYBI4TA"
+      "name": "Frontent Developer",
+      "id": "EXheEyoXTYk"
+    },
+    {
+      "name": "Data Base",
+      "id": "-QfQJXWEA3Y"
+    },
+    {
+      "name": "Inspection",
+      "id": "sI-lKx-1H3c"
     }
   ],
+  "completedNotifications": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

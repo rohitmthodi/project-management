@@ -20,6 +20,9 @@ const Login = () => {
       );
 
       if (user) {
+        console.log("Logged in user:", user);
+        console.log("User role:", user.role);
+        
         // Fetch role permissions
         const rolesRes = await axios.get("http://localhost:3005/roles");
         const userRole = rolesRes.data.find((r) => r.name === user.role);

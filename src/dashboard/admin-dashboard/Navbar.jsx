@@ -18,23 +18,28 @@ const Navbar = () => {
 
   const fetchNotificationCount = async () => {
     try {
-      const res = await axios.get("http://localhost:3005/projects");
-      let count = 0;
       if (userRole === "Admin") {
-        count = res.data.length;
+        const notifRes = await axios.get("http://localhost:3005/completedNotifications");
+        setNotificationCount(notifRes.data.length);
       } else {
-        count = res.data.filter(
-          (project) => project.employee === loggedInUser?.name
+        const res = await axios.get("http://localhost:3005/projects");
+        const count = res.data.filter(
+          (project) => project.employee === loggedInUser?.name && project.status !== "completed"
         ).length;
+        setNotificationCount(count);
       }
-      setNotificationCount(count);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const openNotification = () => {
+    setShowNotification(true);
+  };
+
   const closeNotification = () => {
     setShowNotification(false);
+    // Refresh count when closing
     fetchNotificationCount();
   };
 
@@ -55,7 +60,7 @@ const Navbar = () => {
         <div className="relative">
           <FaBell 
             className="text-gray-600 text-lg cursor-pointer hover:text-black" 
-            onClick={() => setShowNotification(true)}
+            onClick={openNotification}
           />
           {notificationCount > 0 && (
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">

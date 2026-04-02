@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { adminDashboardItems } from "../../constants";
 import { IoSettingsSharp } from "react-icons/io5";
 import { FaSignOutAlt } from "react-icons/fa";
@@ -12,24 +12,43 @@ const Sidebar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const role = user?.role;
 
-  // Function to check if role has permission for a menu item
-  const hasPermission = (permission) => {
-    // Only Admin sees everything
-    if (role === "Admin") return true;
-    
-    // All other roles (Employee, Sub Admin, Manager, etc.) see only these
-    if (permission === "dashboard") return true;
-    if (permission === "projects") return true;
-    if (permission === "tasks") return true;
-    
-    // Roles and Employees are hidden for non-Admin
-    return false;
-  };
+  console.log("Current user role:", role); // Debug log
 
-  // Filter items based on permissions
-  const filteredItems = adminDashboardItems.filter((item) =>
-    hasPermission(item.permission)
-  );
+  // Filter items based on role
+  const filteredItems = adminDashboardItems.filter((item) => {
+    // Admin sees everything except Dashboard
+    if (role === "Admin") {
+      if (item.permission === "dashboard") return false;
+      return true; // Admin sees all other items (Roles, Employees, Projects, Tasks)
+    }
+    
+    // For non-Admin users (Employee, Sub Admin, etc.)
+    // Only show Projects and Tasks
+    if (item.permission === "projects") return true;
+    if (item.permission === "tasks") return true;
+    
+    return false;
+  });
+
+  console.log("Filtered items:", filteredItems.map(i => i.title)); // Debug log
+
+  // Set default redirect based on role
+  useEffect(() => {
+    const currentPath = location.pathname;
+    
+    // If user is on /admin or /admin/dashboard, redirect to default page
+    if (currentPath === "/admin" || currentPath === "/admin/dashboard") {
+      if (role === "Admin") {
+        navigate("/admin/roles", { replace: true });
+      } else {
+        navigate("/admin/projects", { replace: true });
+      }
+    }
+  }, [location.pathname, role, navigate]);
+
+  const isActivePath = (path) => {
+    return location.pathname === path || location.pathname.startsWith(path + "/");
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -50,8 +69,7 @@ const Sidebar = () => {
         <div className="flex flex-col gap-1">
           {filteredItems.map((item) => {
             const Icon = item.icon;
-
-            const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + "/");
+            const isActive = isActivePath(item.path);
 
             return (
               <Link
@@ -61,7 +79,7 @@ const Sidebar = () => {
                   ${
                     isActive
                       ? "bg-blue-100 text-blue-700 border-r-2 border-blue-700"
-                      : "text-gray-500 hover:bg-blue-100"
+                      : "text-gray-500 hover:bg-blue-100 hover:text-blue-700"
                   }`}
               >
                 {Icon && <Icon size={20} />}
@@ -76,11 +94,11 @@ const Sidebar = () => {
       <div className="flex flex-col gap-1">
         <Link
           to="/admin/account"
-          className={`flex items-center gap-3 p-3 rounded-lg font-medium
+          className={`flex items-center gap-3 p-3 rounded-lg font-medium transition-all
             ${
               location.pathname.startsWith("/admin/account")
                 ? "bg-blue-100 text-blue-700 border-r-2 border-blue-700"
-                : "text-gray-500 hover:bg-blue-100"
+                : "text-gray-500 hover:bg-blue-100 hover:text-blue-700"
             }`}
         >
           <MdAccountCircle size={18} />
@@ -89,11 +107,11 @@ const Sidebar = () => {
 
         <Link
           to="/admin/settings"
-          className={`flex items-center gap-3 p-3 rounded-lg font-medium
+          className={`flex items-center gap-3 p-3 rounded-lg font-medium transition-all
             ${
               location.pathname.startsWith("/admin/settings")
                 ? "bg-blue-100 text-blue-700 border-r-2 border-blue-700"
-                : "text-gray-500 hover:bg-blue-100"
+                : "text-gray-500 hover:bg-blue-100 hover:text-blue-700"
             }`}
         >
           <IoSettingsSharp size={18} />
@@ -102,7 +120,7 @@ const Sidebar = () => {
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 p-3 rounded-lg text-red-500 hover:bg-red-100 font-medium"
+          className="flex items-center gap-3 p-3 rounded-lg text-red-500 hover:bg-red-100 font-medium transition-all"
         >
           <FaSignOutAlt size={18} />
           <p>Logout</p>
