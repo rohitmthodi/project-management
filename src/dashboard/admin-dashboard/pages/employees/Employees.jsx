@@ -26,6 +26,19 @@ const EmployeesPage = () => {
     setShowPopup(true);
   };
 
+  const handleDelete = async (id, name) => {
+    if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
+      try {
+        await axios.delete(`http://localhost:3005/employees/${id}`);
+        alert("Employee Deleted ✅");
+        fetchEmployees(); // Refresh the list
+      } catch (error) {
+        console.log(error);
+        alert("Error deleting employee");
+      }
+    }
+  };
+
   return (
     <div className="bg-white p-5 rounded-xl shadow-md h-full overflow-auto">
       {/* Header */}
@@ -34,7 +47,10 @@ const EmployeesPage = () => {
 
         {/* Add Button */}
         <button
-          onClick={() => setShowPopup(true)}
+          onClick={() => {
+            setSelectedEmployee(null);
+            setShowPopup(true);
+          }}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
           <FaPlus />
@@ -75,9 +91,9 @@ const EmployeesPage = () => {
                 </td>
               </tr>
             ) : (
-              employees.map((emp, index) => (
+              employees.map((emp) => (
                 <tr
-                  key={index}
+                  key={emp.id}
                   className="even:bg-gray-100 odd:bg-gray-50 transition"
                 >
                   <td className="py-3 px-4 border border-black/10">
@@ -96,11 +112,16 @@ const EmployeesPage = () => {
                   <td className="py-3 px-4 border border-black/20 space-x-3">
                     <button
                       onClick={() => handleEditClick(emp)}
-                      className="text-blue-500"
+                      className="text-blue-500 hover:text-blue-700"
                     >
                       Edit
                     </button>
-                    <button className="text-red-500">Delete</button>
+                    <button
+                      onClick={() => handleDelete(emp.id, emp.name)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const AddEmployees = ({ onClose, editData, refreshEmployees }) => {
@@ -10,6 +10,23 @@ const AddEmployees = ({ onClose, editData, refreshEmployees }) => {
       role: ""
     }
   );
+  
+  const [roles, setRoles] = useState([]);
+
+  // Fetch roles from API
+  const fetchRoles = async () => {
+    try {
+      const data = await fetch("http://localhost:3005/roles");
+      const convert = await data.json();
+      setRoles(convert);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoles();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,20 +61,65 @@ const AddEmployees = ({ onClose, editData, refreshEmployees }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input type="text" name="name" value={employeeData.name} onChange={handleChange} placeholder="Full Name" className="border border-gray-300 p-2 w-full rounded-md" required />
-          <input type="email" name="email" value={employeeData.email} onChange={handleChange} placeholder="Email" className="border border-gray-300 p-2 w-full rounded-md" required />
-          <input type="text" name="password" value={employeeData.password} onChange={handleChange} placeholder="Password" className="border border-gray-300 p-2 w-full rounded-md" required />
+          <input 
+            type="text" 
+            name="name" 
+            value={employeeData.name} 
+            onChange={handleChange} 
+            placeholder="Full Name" 
+            className="border border-gray-300 p-2 w-full rounded-md" 
+            required 
+          />
           
-          <select name="role" value={employeeData.role} onChange={handleChange} className="border border-gray-300 p-2 w-full rounded-md" required>
+          <input 
+            type="email" 
+            name="email" 
+            value={employeeData.email} 
+            onChange={handleChange} 
+            placeholder="Email" 
+            className="border border-gray-300 p-2 w-full rounded-md" 
+            required 
+          />
+          
+          <input 
+            type="text" 
+            name="password" 
+            value={employeeData.password} 
+            onChange={handleChange} 
+            placeholder="Password" 
+            className="border border-gray-300 p-2 w-full rounded-md" 
+            required 
+          />
+          
+          <select 
+            name="role" 
+            value={employeeData.role} 
+            onChange={handleChange} 
+            className="border border-gray-300 p-2 w-full rounded-md" 
+            required
+          >
             <option value="">Select Role</option>
-            <option value="Admin">Admin</option>
-            <option value="Employee">Employee</option>
-            {/* Roles from your roles database will appear here dynamically */}
+            {roles.map((role) => (
+              <option key={role.id} value={role.name}>
+                {role.name}
+              </option>
+            ))}
           </select>
 
           <div className="flex justify-end gap-3 mt-6">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300">Cancel</button>
-            <button type="submit" className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">{editData ? "Update" : "Add"}</button>
+            <button 
+              type="button" 
+              onClick={onClose} 
+              className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+            >
+              {editData ? "Update" : "Add"}
+            </button>
           </div>
         </form>
       </div>

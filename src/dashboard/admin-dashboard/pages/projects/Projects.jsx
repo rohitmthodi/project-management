@@ -10,7 +10,7 @@ const ProjectsPage = () => {
 
   const fetchProjects = async () => {
     try {
-      const res = await axios.get("http://localhost:3005/project");
+      const res = await axios.get("http://localhost:3005/projects");
       setProjects(res.data);
     } catch (error) {
       console.log(error);
@@ -26,6 +26,19 @@ const ProjectsPage = () => {
     setShowPopup(true);
   };
 
+  const handleDelete = async (id, name) => {
+    if (window.confirm(`Are you sure you want to delete "${name}" project?`)) {
+      try {
+        await axios.delete(`http://localhost:3005/projects/${id}`);
+        alert("Project Deleted ✅");
+        fetchProjects();
+      } catch (error) {
+        console.log(error);
+        alert("Error deleting project");
+      }
+    }
+  };
+
   return (
     <div className="bg-white p-5 rounded-xl shadow-md h-full overflow-auto">
       
@@ -34,7 +47,10 @@ const ProjectsPage = () => {
         <h2 className="text-xl font-semibold">Projects</h2>
 
         <button
-          onClick={() => setShowPopup(true)}
+          onClick={() => {
+            setSelectedProject(null);
+            setShowPopup(true);
+          }}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
           <FaPlus />
@@ -66,7 +82,7 @@ const ProjectsPage = () => {
               <th className="py-3 px-4 border">Employee</th>
               <th className="py-3 px-4 border">Task</th>
               <th className="py-3 px-4 border">Actions</th>
-            </tr>
+             </tr>
           </thead>
 
           {/* Body */}
@@ -91,16 +107,19 @@ const ProjectsPage = () => {
                   <td className="py-3 px-4 border space-x-3">
                     <button
                       onClick={() => handleEditClick(proj)}
-                      className="text-blue-500"
+                      className="text-blue-500 hover:text-blue-700"
                     >
                       Edit
                     </button>
 
-                    <button className="text-red-500">
+                    <button
+                      onClick={() => handleDelete(proj.id, proj.name)}
+                      className="text-red-500 hover:text-red-700"
+                    >
                       Delete
                     </button>
-                  </td>
-                </tr>
+                   </td>
+                 </tr>
               ))
             )}
           </tbody>

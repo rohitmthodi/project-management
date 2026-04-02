@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const AddRoles = ({ onClose, refreshRoles }) => {
+const AddRoles = ({ onClose, refreshRoles, editData }) => {
 
   // ✅ state for roles
   const [roleData, setRoleData] = useState({
@@ -12,6 +12,30 @@ const AddRoles = ({ onClose, refreshRoles }) => {
       tasks: { create: false, edit: false, delete: false }
     }
   });
+
+  // ✅ populate form when editing
+  useEffect(() => {
+    if (editData) {
+      setRoleData({
+        name: editData.name || "",
+        description: editData.description || "",
+        permissions: editData.permissions || {
+          projects: { create: false, edit: false, delete: false },
+          tasks: { create: false, edit: false, delete: false }
+        }
+      });
+    } else {
+      // Reset form when adding new role
+      setRoleData({
+        name: "",
+        description: "",
+        permissions: {
+          projects: { create: false, edit: false, delete: false },
+          tasks: { create: false, edit: false, delete: false }
+        }
+      });
+    }
+  }, [editData]);
 
   // ✅ handle input
   const handleChange = (e) => {
@@ -42,25 +66,22 @@ const AddRoles = ({ onClose, refreshRoles }) => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3005/roles", roleData);
-
-      alert("Role Added ✅");
-
-      // reset
-      setRoleData({
-        name: "",
-        description: "",
-        permissions: {
-          projects: { create: false, edit: false, delete: false },
-          tasks: { create: false, edit: false, delete: false }
-        }
-      });
+      if (editData && editData.id) {
+        // UPDATE existing role
+        await axios.put(`http://localhost:3005/roles/${editData.id}`, roleData);
+        alert("Role Updated ✅");
+      } else {
+        // CREATE new role
+        await axios.post("http://localhost:3005/roles", roleData);
+        alert("Role Added ✅");
+      }
 
       refreshRoles(); // 🔥 refresh table
       onClose(); // close popup
 
     } catch (error) {
       console.log(error);
+      alert("Error saving role");
     }
   };
 
@@ -71,7 +92,7 @@ const AddRoles = ({ onClose, refreshRoles }) => {
 
         {/* Header */}
         <div className="flex justify-between items-center mb-5">
-          <h2 className="text-xl font-semibold">Create Role</h2>
+          <h2 className="text-xl font-semibold">{editData ? "Edit Role" : "Create Role"}</h2>
 
           <button
             onClick={onClose}
@@ -98,7 +119,7 @@ const AddRoles = ({ onClose, refreshRoles }) => {
             name="description"
             value={roleData.description}
             onChange={handleChange}
-            placeholder="Description"
+            placeholder="Description (optional)"
             rows={3}
             className="border border-gray-300 p-2 w-full rounded-md"
           />
@@ -190,7 +211,7 @@ const AddRoles = ({ onClose, refreshRoles }) => {
               type="submit"
               className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
             >
-              Add
+              {editData ? "Update" : "Add"}
             </button>
           </div>
 

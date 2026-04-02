@@ -3,38 +3,6 @@
     {
       "name": "Admin",
       "description": "",
-      "id": "T7HNUI3HifE"
-    },
-    {
-      "name": "Employee",
-      "description": "",
-      "id": "YSshA4rBO0w"
-    },
-    {
-      "name": "Sub Admin",
-      "description": "",
-      "id": "tQj4yL5QRMA"
-    },
-    {
-      "name": "Project Manager",
-      "description": "",
-      "permissions": {
-        "projects": {
-          "create": false,
-          "edit": false,
-          "delete": false
-        },
-        "tasks": {
-          "create": false,
-          "edit": false,
-          "delete": false
-        }
-      },
-      "id": "nqvfn5ummFE"
-    },
-    {
-      "name": "Sususus",
-      "description": "",
       "permissions": {
         "projects": {
           "create": true,
@@ -42,12 +10,29 @@
           "delete": true
         },
         "tasks": {
+          "create": true,
+          "edit": true,
+          "delete": true
+        }
+      },
+      "id": "BX6jbbW1NS8"
+    },
+    {
+      "name": "Employee",
+      "description": "",
+      "permissions": {
+        "projects": {
           "create": false,
-          "edit": false,
+          "edit": true,
+          "delete": false
+        },
+        "tasks": {
+          "create": false,
+          "edit": true,
           "delete": false
         }
       },
-      "id": "6sYgQg2_oYI"
+      "id": "znarKfQ3y1k"
     }
   ],
   "employees": [
@@ -71,23 +56,33 @@
       "password": "123",
       "role": "Sub Admin",
       "id": "yhcOSdYCugA"
-    },
-    {
-      "name": "Jagath",
-      "email": "j@gmail.com",
-      "password": "123",
-      "role": "Project Manager",
-      "id": "SUqpV0-F10w"
-    },
-    {
-      "name": "Tester",
-      "email": "t@gmail.com",
-      "password": "123",
-      "role": "Employee",
-      "id": "fMuXyHk9liw"
     }
   ],
-  "project": [],
-  "task": [],
+  "projects": [
+    {
+      "name": "KitKat",
+      "description": "qq",
+      "employee": "Admin",
+      "task": "Frontend",
+      "id": "YPOiH8r_JQ8"
+    },
+    {
+      "name": "Samsung",
+      "description": "ss",
+      "employee": "rohit",
+      "task": "Frontend",
+      "id": "_R0pq-S4ENY"
+    }
+  ],
+  "tasks": [
+    {
+      "name": "Frontend",
+      "id": "2DjZ8myMf3I"
+    },
+    {
+      "name": "Backend",
+      "id": "JXdSiYBI4TA"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

@@ -1,18 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const AddProjects = ({ onClose }) => {
+const AddProjects = ({ onClose, editData, refreshProjects }) => {
   const [projectData, setProjectData] = useState({
     name: "",
     description: "",
     employee: "",
     task: ""
   });
+  
+  const [employees, setEmployees] = useState([]);
+  const [tasks, setTasks] = useState([]);
+
+  // Fetch employees from API
+  const fetchEmployees = async () => {
+    try {
+      const res = await axios.get("http://localhost:3005/employees");
+      setEmployees(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Fetch tasks from API
+  const fetchTasks = async () => {
+    try {
+      const res = await axios.get("http://localhost:3005/tasks");
+      setTasks(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEmployees();
+    fetchTasks();
+  }, []);
+
+  // Populate form when editing
+  useEffect(() => {
+    if (editData) {
+      setProjectData({
+        name: editData.name || "",
+        description: editData.description || "",
+        employee: editData.employee || "",
+        task: editData.task || ""
+      });
+    }
+  }, [editData]);
 
   // handle input
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setProjectData((prev) => ({
       ...prev,
       [name]: value
@@ -24,9 +63,13 @@ const AddProjects = ({ onClose }) => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:3005/project", projectData);
-
-      alert("Project Added ✅");
+      if (editData) {
+        await axios.put(`http://localhost:3005/projects/${editData.id}`, projectData);
+        alert("Project Updated ✅");
+      } else {
+        await axios.post("http://localhost:3005/projects", projectData);
+        alert("Project Added ✅");
+      }
 
       // reset
       setProjectData({
@@ -36,9 +79,11 @@ const AddProjects = ({ onClose }) => {
         task: ""
       });
 
+      if (refreshProjects) refreshProjects();
       onClose(); // close popup
     } catch (error) {
       console.log(error);
+      alert("Error saving project");
     }
   };
 
@@ -49,7 +94,7 @@ const AddProjects = ({ onClose }) => {
 
         {/* Header */}
         <div className="flex justify-between items-center mb-5">
-          <h2 className="text-xl font-semibold">Create Project</h2>
+          <h2 className="text-xl font-semibold">{editData ? "Edit Project" : "Create Project"}</h2>
 
           <button
             onClick={onClose}
@@ -69,6 +114,7 @@ const AddProjects = ({ onClose }) => {
             onChange={handleChange}
             placeholder="Project Name"
             className="border border-gray-300 p-2 w-full rounded-md"
+            required
           />
 
           <textarea
@@ -80,28 +126,37 @@ const AddProjects = ({ onClose }) => {
             className="border border-gray-300 p-3 w-full rounded-lg resize-none"
           />
 
+          {/* Employee Select Dropdown */}
           <select
             name="employee"
             value={projectData.employee}
             onChange={handleChange}
             required
-            className="border border-gray-300 p-2 w-full rounded-md bg-whit outline-none"
+            className="border border-gray-300 p-2 w-full rounded-md outline-none"
           >
             <option value="">Select Employee</option>
-            <option value="Admin">Frontent Developer</option>
-            <option value="Employee">Backend Developer</option>
-            <option value="Employee">Backend Developer</option>
-            <option value="Employee">Manager</option>
+            {employees.map((emp) => (
+              <option key={emp.id} value={emp.name}>
+                {emp.name}
+              </option>
+            ))}
           </select>
 
-          <input
-            type="text"
+          {/* Task Select Dropdown */}
+          <select
             name="task"
             value={projectData.task}
             onChange={handleChange}
-            placeholder="Assign Task"
-            className="border border-gray-300 p-2 w-full rounded-md"
-          />
+            required
+            className="border border-gray-300 p-2 w-full rounded-md outline-none"
+          >
+            <option value="">Select Task</option>
+            {tasks.map((task) => (
+              <option key={task.id} value={task.name}>
+                {task.name}
+              </option>
+            ))}
+          </select>
 
           {/* Buttons */}
           <div className="flex justify-end gap-3 mt-6">
@@ -117,7 +172,7 @@ const AddProjects = ({ onClose }) => {
               type="submit"
               className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
             >
-              Add
+              {editData ? "Update" : "Add"}
             </button>
           </div>
 
