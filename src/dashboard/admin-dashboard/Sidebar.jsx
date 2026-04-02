@@ -34,6 +34,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("role");
+    localStorage.removeItem("userPermissions");
     navigate("/");
   };
 

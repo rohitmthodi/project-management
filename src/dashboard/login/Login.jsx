@@ -20,10 +20,24 @@ const Login = () => {
       );
 
       if (user) {
-        console.log("Logged in user role:", user.role); // ✅ Added this line
+        // Fetch role permissions
+        const rolesRes = await axios.get("http://localhost:3005/roles");
+        const userRole = rolesRes.data.find((r) => r.name === user.role);
+        
+        // Store user and permissions
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("role", user.role);
-
+        
+        if (userRole) {
+          localStorage.setItem("userPermissions", JSON.stringify(userRole.permissions));
+        } else if (user.role === "Admin") {
+          // Admin has full permissions
+          localStorage.setItem("userPermissions", JSON.stringify({
+            projects: { create: true, edit: true, delete: true },
+            tasks: { create: true, edit: true, delete: true }
+          }));
+        }
+        
         navigate("/admin");
       } else {
         setError("Wrong credentials. Try again!");

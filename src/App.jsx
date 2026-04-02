@@ -10,6 +10,7 @@ import Settings from "./dashboard/admin-dashboard/pages/Settings";
 import Account from "./dashboard/admin-dashboard/pages/Account";
 import Login from "./dashboard/login/Login";
 import AddProjects from "./dashboard/admin-dashboard/pages/projects/AddProjects";
+import ProjectNotification from "./dashboard/admin-dashboard/ProjectNotification";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="account" element={<Account />} />
           <Route path="settings" element={<Settings />} />
           <Route path="add-project" element={<AddProjects />} />
+          <Route path="project-notification" element={<ProjectNotification />} />
         </Route>
 
       </Routes>

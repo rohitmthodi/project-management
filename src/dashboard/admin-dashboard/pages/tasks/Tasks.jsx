@@ -7,6 +7,10 @@ const Tasks = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
+  
+  // Get user permissions from localStorage
+  const userPermissions = JSON.parse(localStorage.getItem("userPermissions"));
+  const userRole = localStorage.getItem("role");
 
   const fetchTasks = async () => {
     try {
@@ -39,23 +43,30 @@ const Tasks = () => {
     }
   };
 
+  // Check permissions
+  const canCreate = userRole === "Admin" || userPermissions?.tasks?.create;
+  const canEdit = userRole === "Admin" || userPermissions?.tasks?.edit;
+  const canDelete = userRole === "Admin" || userPermissions?.tasks?.delete;
+
   return (
     <div className="bg-white p-5 rounded-xl shadow-md h-full">
       {/* Header */}
       <div className="flex justify-between items-center mb-5">
         <h2 className="text-xl font-semibold">Tasks</h2>
 
-        {/* Add Button */}
-        <button 
-          onClick={() => {
-            setSelectedTask(null);
-            setShowPopup(true);
-          }}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          <FaPlus />
-          Add Task
-        </button>
+        {/* Add Button - Only show if user has create permission */}
+        {canCreate && (
+          <button 
+            onClick={() => {
+              setSelectedTask(null);
+              setShowPopup(true);
+            }}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            <FaPlus />
+            Add Task
+          </button>
+        )}
       </div>
 
       {/* Popup */}
@@ -93,18 +104,29 @@ const Tasks = () => {
                     {task.name}
                   </td>
                   <td className="py-3 px-4 border space-x-3">
-                    <button
-                      onClick={() => handleEditClick(task)}
-                      className="text-blue-500 hover:text-blue-700"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(task.id, task.name)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      Delete
-                    </button>
+                    {/* Edit Button - Only show if user has edit permission */}
+                    {canEdit && (
+                      <button
+                        onClick={() => handleEditClick(task)}
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        Edit
+                      </button>
+                    )}
+
+                    {/* Delete Button - Only show if user has delete permission */}
+                    {canDelete && (
+                      <button
+                        onClick={() => handleDelete(task.id, task.name)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Delete
+                      </button>
+                    )}
+
+                    {!canEdit && !canDelete && (
+                      <span className="text-gray-400">No actions available</span>
+                    )}
                   </td>
                 </tr>
               ))

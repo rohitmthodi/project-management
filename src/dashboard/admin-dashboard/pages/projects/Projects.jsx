@@ -3,10 +3,14 @@ import { FaPlus } from "react-icons/fa";
 import AddProjects from "./AddProjects";
 import axios from "axios";
 
-const ProjectsPage = () => {
+const Projects = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
+  
+  // Get user permissions from localStorage
+  const userPermissions = JSON.parse(localStorage.getItem("userPermissions"));
+  const userRole = localStorage.getItem("role");
 
   const fetchProjects = async () => {
     try {
@@ -39,6 +43,11 @@ const ProjectsPage = () => {
     }
   };
 
+  // Check permissions
+  const canCreate = userRole === "Admin" || userPermissions?.projects?.create;
+  const canEdit = userRole === "Admin" || userPermissions?.projects?.edit;
+  const canDelete = userRole === "Admin" || userPermissions?.projects?.delete;
+
   return (
     <div className="bg-white p-5 rounded-xl shadow-md h-full overflow-auto">
       
@@ -46,16 +55,19 @@ const ProjectsPage = () => {
       <div className="flex justify-between items-center mb-5">
         <h2 className="text-xl font-semibold">Projects</h2>
 
-        <button
-          onClick={() => {
-            setSelectedProject(null);
-            setShowPopup(true);
-          }}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          <FaPlus />
-          Add Project
-        </button>
+        {/* Add Button - Only show if user has create permission */}
+        {canCreate && (
+          <button
+            onClick={() => {
+              setSelectedProject(null);
+              setShowPopup(true);
+            }}
+            className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            <FaPlus />
+            Add Project
+          </button>
+        )}
       </div>
 
       {/* Popup */}
@@ -105,20 +117,30 @@ const ProjectsPage = () => {
                   <td className="py-3 px-4 border">{proj.task}</td>
 
                   <td className="py-3 px-4 border space-x-3">
-                    <button
-                      onClick={() => handleEditClick(proj)}
-                      className="text-blue-500 hover:text-blue-700"
-                    >
-                      Edit
-                    </button>
+                    {/* Edit Button - Only show if user has edit permission */}
+                    {canEdit && (
+                      <button
+                        onClick={() => handleEditClick(proj)}
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        Edit
+                      </button>
+                    )}
 
-                    <button
-                      onClick={() => handleDelete(proj.id, proj.name)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      Delete
-                    </button>
-                   </td>
+                    {/* Delete Button - Only show if user has delete permission */}
+                    {canDelete && (
+                      <button
+                        onClick={() => handleDelete(proj.id, proj.name)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        Delete
+                      </button>
+                    )}
+
+                    {!canEdit && !canDelete && (
+                      <span className="text-gray-400">No actions available</span>
+                    )}
+                  </td>
                  </tr>
               ))
             )}
@@ -131,4 +153,4 @@ const ProjectsPage = () => {
   );
 };
 
-export default ProjectsPage;
+export default Projects;

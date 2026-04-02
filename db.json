@@ -33,6 +33,40 @@
         }
       },
       "id": "znarKfQ3y1k"
+    },
+    {
+      "name": "new",
+      "description": "",
+      "permissions": {
+        "projects": {
+          "create": false,
+          "edit": false,
+          "delete": true
+        },
+        "tasks": {
+          "create": false,
+          "edit": true,
+          "delete": false
+        }
+      },
+      "id": "mIR_Uel7zX8"
+    },
+    {
+      "name": "sp",
+      "description": "",
+      "permissions": {
+        "projects": {
+          "create": true,
+          "edit": true,
+          "delete": true
+        },
+        "tasks": {
+          "create": true,
+          "edit": true,
+          "delete": true
+        }
+      },
+      "id": "2YOi48ouFkg"
     }
   ],
   "employees": [
@@ -56,6 +90,20 @@
       "password": "123",
       "role": "Sub Admin",
       "id": "yhcOSdYCugA"
+    },
+    {
+      "name": "e",
+      "email": "s@gmail.com",
+      "password": "123",
+      "role": "new",
+      "id": "XelelIWRaOQ"
+    },
+    {
+      "name": "sp",
+      "email": "sp@gmail.com",
+      "password": "123",
+      "role": "sp",
+      "id": "P7hF4qyX-uQ"
     }
   ],
   "projects": [
@@ -72,6 +120,20 @@
       "employee": "rohit",
       "task": "Frontend",
       "id": "_R0pq-S4ENY"
+    },
+    {
+      "name": "ed2e",
+      "description": "ede",
+      "employee": "rohit",
+      "task": "Frontend",
+      "id": "Dud6xNab5Q0"
+    },
+    {
+      "name": "sp",
+      "description": "",
+      "employee": "sp",
+      "task": "Frontend",
+      "id": "89OOERkIJyU"
     }
   ],
   "tasks": [
