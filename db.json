@@ -1,0 +1,93 @@
+{
+  "roles": [
+    {
+      "name": "Admin",
+      "description": "",
+      "id": "T7HNUI3HifE"
+    },
+    {
+      "name": "Employee",
+      "description": "",
+      "id": "YSshA4rBO0w"
+    },
+    {
+      "name": "Sub Admin",
+      "description": "",
+      "id": "tQj4yL5QRMA"
+    },
+    {
+      "name": "Project Manager",
+      "description": "",
+      "permissions": {
+        "projects": {
+          "create": false,
+          "edit": false,
+          "delete": false
+        },
+        "tasks": {
+          "create": false,
+          "edit": false,
+          "delete": false
+        }
+      },
+      "id": "nqvfn5ummFE"
+    },
+    {
+      "name": "Sususus",
+      "description": "",
+      "permissions": {
+        "projects": {
+          "create": true,
+          "edit": true,
+          "delete": true
+        },
+        "tasks": {
+          "create": false,
+          "edit": false,
+          "delete": false
+        }
+      },
+      "id": "6sYgQg2_oYI"
+    }
+  ],
+  "employees": [
+    {
+      "name": "Admin",
+      "email": "admin@gmail.com",
+      "password": "123",
+      "role": "Admin",
+      "id": "H0_BTjstFa4"
+    },
+    {
+      "name": "Employee",
+      "email": "employee@gmail.com",
+      "password": "123",
+      "role": "Employee",
+      "id": "KysiCVbYr5c"
+    },
+    {
+      "name": "rohit",
+      "email": "rohit@gmail.com",
+      "password": "123",
+      "role": "Sub Admin",
+      "id": "yhcOSdYCugA"
+    },
+    {
+      "name": "Jagath",
+      "email": "j@gmail.com",
+      "password": "123",
+      "role": "Project Manager",
+      "id": "SUqpV0-F10w"
+    },
+    {
+      "name": "Tester",
+      "email": "t@gmail.com",
+      "password": "123",
+      "role": "Employee",
+      "id": "fMuXyHk9liw"
+    }
+  ],
+  "project": [],
+  "task": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}
